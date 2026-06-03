@@ -13,6 +13,7 @@ export default function FindLetterGame() {
   const { progress, recordAttempt } = useProgress();
   const [round, setRound] = useState(() => makeRound(progress));
   const [message, setMessage] = useState('Послушай и найди букву.');
+  const [messageStatus, setMessageStatus] = useState('idle');
   const answerText = useMemo(() => (
     `Найди букву ${round.answer.letter}. Звук ${round.answer.phoneme}.`
   ), [round.answer]);
@@ -26,10 +27,12 @@ export default function FindLetterGame() {
       recordAttempt(item.letter, { correct: true, firstTry: round.mistakes === 0 });
       setRound((current) => ({ ...current, solved: true }));
       setMessage(`Верно. ${item.letter} — ${item.word}. Ты услышал звук ${item.phoneme}.`);
+      setMessageStatus('correct');
     } else {
       recordAttempt(round.answer.letter, { correct: false });
       setRound((current) => ({ ...current, mistakes: current.mistakes + 1 }));
       setMessage(`${item.letter} — другая буква. ${round.answer.hint}`);
+      setMessageStatus('wrong');
     }
   };
 
@@ -37,6 +40,7 @@ export default function FindLetterGame() {
     const nextProgress = progress;
     setRound(makeRound(nextProgress));
     setMessage('Послушай и найди букву.');
+    setMessageStatus('idle');
   };
 
   return (
@@ -57,7 +61,7 @@ export default function FindLetterGame() {
           </button>
         ))}
       </div>
-      <p className="game-message">{message}</p>
+      <p className={`game-message game-message--${messageStatus}`}>{message}</p>
       <BigButton onClick={nextRound} variant="soft">
         Новый раунд
       </BigButton>

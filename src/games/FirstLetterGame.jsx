@@ -21,6 +21,7 @@ export default function FirstLetterGame() {
   const { progress, recordAttempt } = useProgress();
   const [round, setRound] = useState(() => makeRound(progress));
   const [message, setMessage] = useState('Какая буква первая?');
+  const [messageStatus, setMessageStatus] = useState('idle');
 
   const choose = (item) => {
     if (round.solved) {
@@ -31,16 +32,19 @@ export default function FirstLetterGame() {
       recordAttempt(item.letter, { correct: true, firstTry: round.mistakes === 0 });
       setRound((current) => ({ ...current, solved: true }));
       setMessage(`Да. ${round.answer.word} начинается со звука ${round.answer.phoneme}.`);
+      setMessageStatus('correct');
     } else {
       recordAttempt(round.answer.letter, { correct: false });
       setRound((current) => ({ ...current, mistakes: current.mistakes + 1 }));
       setMessage(`Слушаем начало слова: ${round.answer.word}. ${round.answer.hint}`);
+      setMessageStatus('wrong');
     }
   };
 
   const nextRound = () => {
     setRound(makeRound(progress));
     setMessage('Какая буква первая?');
+    setMessageStatus('idle');
   };
 
   return (
@@ -64,7 +68,7 @@ export default function FirstLetterGame() {
           </button>
         ))}
       </div>
-      <p className="game-message">{message}</p>
+      <p className={`game-message game-message--${messageStatus}`}>{message}</p>
       <BigButton onClick={nextRound} variant="soft">
         Новое слово
       </BigButton>

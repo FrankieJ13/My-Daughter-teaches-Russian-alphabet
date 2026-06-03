@@ -127,6 +127,14 @@ p {
   text-align: center;
 }
 
+.big-button:disabled {
+  background: #e9ecef;
+  color: #777;
+  cursor: default;
+  box-shadow: 0 3px 0 #8b8b8b;
+  border-color: #8b8b8b;
+}
+
 .big-button:active {
   transform: translateY(3px);
   box-shadow: 0 2px 0 #232323;
@@ -293,6 +301,68 @@ p {
   box-shadow: 0 5px 0 #232323;
 }
 
+.mini-check--correct {
+  background: #e7f9ed;
+  border-color: #1f8f48;
+  box-shadow: 0 5px 0 #1f8f48;
+}
+
+.mini-check--wrong {
+  background: #ffe9e9;
+  border-color: #d64545;
+  box-shadow: 0 5px 0 #d64545;
+}
+
+.mini-check--help {
+  background: #fff4ce;
+  border-color: #d49300;
+  box-shadow: 0 5px 0 #d49300;
+}
+
+.check-status {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  align-items: center;
+  gap: 12px;
+  min-height: 82px;
+}
+
+.check-status__icon {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border: 3px solid #232323;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #232323;
+  font-size: 2rem;
+  font-weight: 950;
+}
+
+.mini-check--correct .check-status__icon {
+  background: #34c759;
+  color: #ffffff;
+}
+
+.mini-check--wrong .check-status__icon {
+  background: #ff4d4d;
+  color: #ffffff;
+}
+
+.mini-check--help .check-status__icon {
+  background: #ffcf4d;
+}
+
+.check-status p {
+  color: #232323;
+  font-weight: 900;
+}
+
+.actions--compact {
+  margin-top: 0;
+}
+
 .game-tabs {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -347,14 +417,59 @@ p {
 
 .letter-option:disabled,
 .memory-card:disabled {
-  opacity: 0.72;
+  opacity: 0.86;
   cursor: default;
+}
+
+.letter-option--correct {
+  background: #34c759;
+  color: #ffffff;
+  border-color: #1f8f48;
+  box-shadow: 0 4px 0 #1f8f48;
+  animation: correct-pop 420ms ease;
+}
+
+.letter-option--wrong {
+  background: #ff6b6b;
+  color: #ffffff;
+  border-color: #d64545;
+  box-shadow: 0 4px 0 #d64545;
+  animation: wrong-shake 320ms ease;
 }
 
 .letter-option:active,
 .memory-card:active {
   transform: translateY(2px);
   box-shadow: 0 2px 0 #232323;
+}
+
+@keyframes correct-pop {
+  0% {
+    transform: scale(1);
+  }
+
+  55% {
+    transform: scale(1.08);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes wrong-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-6px);
+  }
+
+  75% {
+    transform: translateX(6px);
+  }
 }
 
 .game-task {
@@ -376,6 +491,18 @@ p {
   background: #fff8df;
   color: #232323;
   font-weight: 800;
+}
+
+.game-message--correct {
+  background: #e7f9ed;
+  color: #176b36;
+  border: 2px solid #34c759;
+}
+
+.game-message--wrong {
+  background: #ffe9e9;
+  color: #9d2525;
+  border: 2px solid #ff6b6b;
 }
 
 .word-prompt {

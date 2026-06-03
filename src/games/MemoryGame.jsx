@@ -30,6 +30,7 @@ export default function MemoryGame() {
   const [matched, setMatched] = useState([]);
   const [pairMistakes, setPairMistakes] = useState({});
   const [message, setMessage] = useState('Открой две карточки: букву и картинку.');
+  const [messageStatus, setMessageStatus] = useState('idle');
 
   const openCards = useMemo(() => cards.filter((card) => openIds.includes(card.id)), [cards, openIds]);
 
@@ -39,6 +40,7 @@ export default function MemoryGame() {
     setMatched([]);
     setPairMistakes({});
     setMessage('Открой две карточки: букву и картинку.');
+    setMessageStatus('idle');
   };
 
   const choose = (card) => {
@@ -56,6 +58,7 @@ export default function MemoryGame() {
         recordAttempt(pair[0].pair, { correct: true, firstTry: !pairMistakes[pair[0].pair] });
         setMatched((current) => [...current, pair[0].pair]);
         setMessage(`Пара найдена: ${pair[0].pair} — ${wordCard?.word || 'слово'}.`);
+        setMessageStatus('correct');
         setTimeout(() => setOpenIds([]), 650);
       } else {
         recordAttempt(pair[0].pair, { correct: false });
@@ -66,6 +69,7 @@ export default function MemoryGame() {
           [pair[1].pair]: true
         }));
         setMessage(`Не пара: ${pair[0].label} и ${pair[1].label}. Ищем букву с её картинкой.`);
+        setMessageStatus('wrong');
         setTimeout(() => setOpenIds([]), 900);
       }
     }
@@ -89,7 +93,7 @@ export default function MemoryGame() {
           );
         })}
       </div>
-      <p className="game-message">
+      <p className={`game-message game-message--${matched.length === 4 ? 'correct' : messageStatus}`}>
         {matched.length === 4 ? 'Все пары найдены!' : message}
       </p>
       {openCards.length === 2 && <span className="sr-only">Открыто две карточки</span>}
