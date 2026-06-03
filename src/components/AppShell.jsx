@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useLocation } from 'react-router-dom';
 
 const links = [
   { to: '/', label: 'Домой' },
@@ -9,8 +9,11 @@ const links = [
 ];
 
 export default function AppShell() {
+  const location = useLocation();
+  const isLetterPage = location.pathname.startsWith('/letter/');
+
   return (
-    <div className="app-shell">
+    <div className={isLetterPage ? 'app-shell app-shell--letter' : 'app-shell'}>
       <header className="topbar">
         <NavLink to="/" className="brand" aria-label="Азбука-игра">
           <span className="brand__mark">А</span>

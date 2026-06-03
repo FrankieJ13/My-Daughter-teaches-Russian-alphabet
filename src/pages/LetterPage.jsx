@@ -106,7 +106,7 @@ export default function LetterPage() {
       <div className="letter-focus" style={{ '--focus-color': item.color }}>
         <span className="letter-focus__emoji" aria-hidden="true">{item.emoji}</span>
         <h1>{item.letter} {item.lower}</h1>
-        <p>{item.letter} — как в слове «{item.word}». Звук: {item.phoneme}.</p>
+        <p className="letter-focus__phrase">{item.letter} — как в слове «{item.word}». Звук: {item.phoneme}.</p>
         <p className="syllables">Слоги: {syllables}</p>
         <ProgressStars value={progress} />
         <AudioButton text={`Буква ${item.letter}. Звук ${item.phoneme}. ${item.word}. ${item.hint}`} label="Послушать букву" />
