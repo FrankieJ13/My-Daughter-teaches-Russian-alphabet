@@ -5,9 +5,52 @@ import ProgressStars from '../components/ProgressStars.jsx';
 import { alphabet, getLetterBySymbol } from '../data/alphabet.js';
 import useProgress from '../hooks/useProgress.js';
 import { makeLetterOptions, shuffle } from '../utils.js';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 const initialCheckMessage = 'Сначала послушай букву, потом найди её ниже.';
+
+function LetterCheck({ item, recordAttempt }) {
+  const [answered, setAnswered] = useState(false);
+  const [mistakes, setMistakes] = useState(0);
+  const [message, setMessage] = useState(initialCheckMessage);
+  const checkOptions = useMemo(() => makeLetterOptions(item, { count: 3 }), [item]);
+
+  const choose = (choice) => {
+    if (answered) {
+      return;
+    }
+
+    if (choice.letter === item.letter) {
+      recordAttempt(item.letter, { correct: true, firstTry: mistakes === 0 });
+      setAnswered(true);
+      setMessage(`Верно. ${item.letter} — это ${item.word}. Звук ${item.phoneme}.`);
+    } else {
+      recordAttempt(item.letter, { correct: false });
+      setMistakes((current) => current + 1);
+      setMessage(`${choice.letter} — другая буква. ${item.hint}`);
+    }
+  };
+
+  return (
+    <div className="mini-check">
+      <h2>Проверка</h2>
+      <p>{message}</p>
+      <div className="option-grid">
+        {checkOptions.map((option) => (
+          <button
+            key={option.letter}
+            type="button"
+            className="letter-option"
+            onClick={() => choose(option)}
+            disabled={answered}
+          >
+            {option.letter}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function LetterPage() {
   const { letter } = useParams();
@@ -16,30 +59,7 @@ export default function LetterPage() {
   const progress = starsFor(item.letter);
   const index = alphabet.findIndex((entry) => entry.letter === item.letter);
   const next = alphabet[(index + 1) % alphabet.length];
-  const [answered, setAnswered] = useState(false);
-  const [message, setMessage] = useState(initialCheckMessage);
-  const checkOptions = useMemo(() => makeLetterOptions(item, { count: 3 }), [item]);
   const syllables = useMemo(() => shuffle(item.syllables).join(' · '), [item]);
-
-  useEffect(() => {
-    setAnswered(false);
-    setMessage(initialCheckMessage);
-  }, [item.letter]);
-
-  const choose = (choice) => {
-    if (answered) {
-      return;
-    }
-
-    if (choice.letter === item.letter) {
-      recordAttempt(item.letter, { correct: true, firstTry: true });
-      setAnswered(true);
-      setMessage(`Верно. ${item.letter} — это ${item.word}. Звук ${item.phoneme}.`);
-    } else {
-      recordAttempt(item.letter, { correct: false });
-      setMessage(`${choice.letter} — другая буква. ${item.hint}`);
-    }
-  };
 
   return (
     <section className="letter-page">
@@ -52,17 +72,7 @@ export default function LetterPage() {
         <ProgressStars value={progress} />
         <AudioButton text={`Буква ${item.letter}. Звук ${item.phoneme}. ${item.word}. ${item.hint}`} label="Послушать букву" />
       </div>
-      <div className="mini-check">
-        <h2>Проверка</h2>
-        <p>{message}</p>
-        <div className="option-grid">
-          {checkOptions.map((option) => (
-            <button key={option.letter} type="button" className="letter-option" onClick={() => choose(option)}>
-              {option.letter}
-            </button>
-          ))}
-        </div>
-      </div>
+      <LetterCheck key={item.letter} item={item} recordAttempt={recordAttempt} />
       <div className="actions">
         <BigButton to={`/letter/${next.letter}`} variant="sunny">Следующая буква</BigButton>
       </div>
