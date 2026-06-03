@@ -37,10 +37,28 @@ button {
   position: sticky;
   top: 0;
   z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
   padding: 12px 16px;
   background: rgba(255, 248, 223, 0.92);
   backdrop-filter: blur(12px);
   border-bottom: 2px solid rgba(35, 35, 35, 0.08);
+}
+
+.topbar__status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 8px 12px;
+  border: 1px solid rgba(35, 35, 35, 0.1);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  color: #232323;
+  font-weight: 900;
+  white-space: nowrap;
 }
 
 .brand {
@@ -172,6 +190,10 @@ p {
   font-weight: 800;
 }
 
+.bottom-nav__icon {
+  display: none;
+}
+
 .bottom-nav__link.active {
   background: #ffcf4d;
   color: #232323;
@@ -270,6 +292,19 @@ p {
   background: color-mix(in srgb, var(--focus-color), white 42%);
   box-shadow: 0 5px 0 #232323;
   text-align: center;
+}
+
+.letter-focus__tile,
+.letter-focus__info {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+}
+
+.letter-focus__letters {
+  font-size: clamp(5rem, 30vw, 10rem);
+  font-weight: 950;
+  line-height: 0.95;
 }
 
 .letter-focus__emoji {
@@ -506,20 +541,35 @@ p {
   }
 
   .bottom-nav__link {
-    min-height: 44px;
-    font-size: 0.72rem;
+    gap: 2px;
+    min-height: 54px;
+    padding: 4px 2px;
+    font-size: 0.69rem;
+    line-height: 1.05;
+  }
+
+  .bottom-nav__icon {
+    display: block;
+    min-height: 24px;
+    font-size: 1.35rem;
+    line-height: 1;
+  }
+
+  .bottom-nav__link.active {
+    background: #ffe8a6;
+    box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.08);
   }
 
   .app-shell--letter .page {
-    height: calc(100dvh - 112px);
-    padding: 8px 10px 0;
+    height: calc(100dvh - 126px);
+    padding: 10px 14px 0;
     overflow: hidden;
   }
 
   .letter-page {
     display: grid;
-    grid-template-rows: auto minmax(160px, 0.9fr) minmax(220px, 1.1fr);
-    gap: 8px;
+    grid-template-rows: auto minmax(168px, 0.92fr) minmax(244px, 1.08fr);
+    gap: 10px;
     height: 100%;
     min-height: 0;
     overflow: hidden;
@@ -533,25 +583,48 @@ p {
   }
 
   .letter-page .letter-focus {
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
     align-items: center;
     justify-items: stretch;
-    gap: 6px 10px;
+    gap: 12px;
     min-height: 0;
-    padding: 8px;
-    border-width: 2px;
-    box-shadow: 0 3px 0 #232323;
+    padding: 14px;
+    border: 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(35, 35, 35, 0.08);
     text-align: left;
   }
 
+  .letter-page .letter-focus__tile {
+    align-content: center;
+    height: 100%;
+    min-height: 0;
+    padding: 12px 8px;
+    border-radius: 8px;
+    background: #ffffff;
+    box-shadow: 0 3px 8px rgba(35, 35, 35, 0.14);
+    text-align: center;
+  }
+
+  .letter-page .letter-focus__info {
+    align-content: center;
+    justify-items: start;
+    gap: 10px;
+    min-width: 0;
+  }
+
   .letter-page .letter-focus__emoji {
-    grid-row: 1 / span 2;
-    font-size: clamp(2.6rem, 11dvh, 4rem);
+    font-size: clamp(2.5rem, 9dvh, 4.2rem);
+  }
+
+  .letter-page .letter-focus__letters {
+    font-size: clamp(3.7rem, 12dvh, 5.7rem);
+    letter-spacing: 0;
   }
 
   .letter-page .letter-focus h1 {
-    font-size: clamp(3.5rem, 15dvh, 5.6rem);
-    line-height: 0.9;
+    font-size: clamp(1.65rem, 7vw, 2rem);
+    line-height: 1;
   }
 
   .letter-page .letter-focus__phrase {
@@ -559,69 +632,82 @@ p {
   }
 
   .letter-page .syllables {
-    grid-column: 1 / span 2;
-    width: 100%;
-    padding: 6px 8px;
-    font-size: 0.92rem;
+    width: auto;
+    max-width: 100%;
+    padding: 8px 12px;
+    font-size: 0.9rem;
     text-align: center;
+    overflow-wrap: anywhere;
+  }
+
+  .letter-page .syllables span {
+    color: #4d4d4d;
   }
 
   .letter-page .stars {
-    justify-self: end;
-    font-size: 1rem;
+    justify-self: center;
+    width: 100%;
+    font-size: 1.35rem;
+    text-align: center;
   }
 
   .letter-page .audio-button {
-    grid-column: 3;
-    grid-row: 2;
-    min-height: 42px;
-    padding: 6px 10px;
+    min-height: 50px;
+    width: 100%;
+    padding: 8px 10px;
+    border: 0;
+    box-shadow: 0 2px 8px rgba(35, 35, 35, 0.12);
     font-size: 0.95rem;
   }
 
   .letter-page .mini-check {
     grid-template-rows: auto 1fr auto;
-    gap: 8px;
+    gap: 12px;
     min-height: 0;
     margin-top: 0;
-    padding: 8px;
-    border-width: 2px;
-    box-shadow: 0 3px 0 #232323;
+    padding: 14px;
+    border: 1px solid rgba(35, 35, 35, 0.08);
+    border-radius: 8px;
+    box-shadow: 0 3px 12px rgba(35, 35, 35, 0.1);
   }
 
   .letter-page .check-status {
-    grid-template-columns: 48px 1fr;
-    gap: 8px;
-    min-height: 52px;
+    grid-template-columns: 58px 1fr;
+    gap: 12px;
+    min-height: 64px;
   }
 
   .letter-page .check-status__icon {
-    width: 48px;
-    height: 48px;
-    border-width: 2px;
-    font-size: 1.55rem;
+    width: 58px;
+    height: 58px;
+    border-color: rgba(35, 35, 35, 0.12);
+    font-size: 1.8rem;
+    box-shadow: 0 2px 8px rgba(35, 35, 35, 0.1);
   }
 
   .letter-page .check-status p {
     display: -webkit-box;
     overflow: hidden;
-    font-size: 0.95rem;
-    line-height: 1.2;
+    font-size: 1.02rem;
+    line-height: 1.24;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
   }
 
   .letter-page .option-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 8px;
+    gap: 10px;
     align-items: stretch;
   }
 
   .letter-page .letter-option {
-    min-height: clamp(64px, 13dvh, 92px);
-    border-width: 2px;
-    font-size: clamp(2.2rem, 11vw, 3.6rem);
-    box-shadow: 0 3px 0 #232323;
+    min-height: clamp(86px, 15dvh, 124px);
+    border: 1px solid #c8d8e8;
+    border-radius: 8px;
+    background: #eef6ff;
+    color: #0b8ff0;
+    font-size: clamp(3rem, 13vw, 4.8rem);
+    box-shadow: 0 3px 8px rgba(35, 35, 35, 0.14);
   }
 
   .letter-page .actions--compact {
@@ -630,74 +716,79 @@ p {
   }
 
   .letter-page .big-button {
-    min-height: 48px;
+    min-height: 56px;
     padding: 8px 10px;
-    font-size: 1rem;
+    border-width: 2px;
+    font-size: 1.05rem;
     box-shadow: 0 3px 0 #232323;
   }
 }
 
 @media (max-width: 699px) and (max-height: 720px) {
   .app-shell--letter .page {
-    height: calc(100dvh - 112px);
+    height: calc(100dvh - 126px);
   }
 
   .letter-page {
-    gap: 6px;
+    gap: 8px;
     height: 100%;
     min-height: 0;
   }
 
   .letter-page .letter-focus {
-    gap: 4px 8px;
-    padding: 6px;
+    gap: 8px;
+    padding: 10px;
   }
 
   .letter-page .letter-focus__emoji {
-    font-size: clamp(2.2rem, 9dvh, 3.2rem);
+    font-size: clamp(2rem, 7dvh, 3.2rem);
+  }
+
+  .letter-page .letter-focus__letters {
+    font-size: clamp(3rem, 10dvh, 4.5rem);
   }
 
   .letter-page .letter-focus h1 {
-    font-size: clamp(3rem, 13dvh, 4.6rem);
+    font-size: clamp(1.35rem, 6vw, 1.7rem);
   }
 
   .letter-page .syllables {
-    padding: 4px 6px;
+    padding: 5px 8px;
     font-size: 0.82rem;
   }
 
   .letter-page .audio-button {
-    min-height: 38px;
+    min-height: 40px;
     font-size: 0.85rem;
   }
 
   .letter-page .mini-check {
-    gap: 6px;
-    padding: 6px;
+    gap: 8px;
+    padding: 10px;
   }
 
   .letter-page .check-status {
-    grid-template-columns: 42px 1fr;
-    min-height: 44px;
+    grid-template-columns: 46px 1fr;
+    min-height: 48px;
   }
 
   .letter-page .check-status__icon {
-    width: 42px;
-    height: 42px;
-    font-size: 1.35rem;
+    width: 46px;
+    height: 46px;
+    font-size: 1.45rem;
   }
 
   .letter-page .check-status p {
-    font-size: 0.86rem;
+    font-size: 0.88rem;
     -webkit-line-clamp: 2;
   }
 
   .letter-page .letter-option {
-    min-height: clamp(56px, 11dvh, 78px);
+    min-height: clamp(64px, 12dvh, 86px);
   }
 
   .letter-page .big-button {
-    min-height: 42px;
+    min-height: 44px;
   }
 }
 

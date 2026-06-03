@@ -104,12 +104,17 @@ export default function LetterPage() {
     <section className="letter-page">
       <Link to="/alphabet" className="back-link">← Все буквы</Link>
       <div className="letter-focus" style={{ '--focus-color': item.color }}>
-        <span className="letter-focus__emoji" aria-hidden="true">{item.emoji}</span>
-        <h1>{item.letter} {item.lower}</h1>
-        <p className="letter-focus__phrase">{item.letter} — как в слове «{item.word}». Звук: {item.phoneme}.</p>
-        <p className="syllables">Слоги: {syllables}</p>
-        <ProgressStars value={progress} />
-        <AudioButton text={`Буква ${item.letter}. Звук ${item.phoneme}. ${item.word}. ${item.hint}`} label="Послушать букву" />
+        <div className="letter-focus__tile">
+          <span className="letter-focus__letters">{item.letter} {item.lower}</span>
+          <span className="letter-focus__emoji" aria-hidden="true">{item.emoji}</span>
+        </div>
+        <div className="letter-focus__info">
+          <h1>Буква {item.letter}</h1>
+          <p className="letter-focus__phrase">{item.letter} — как в слове «{item.word}». Звук: {item.phoneme}.</p>
+          <p className="syllables"><span>Слоги:</span> {syllables}</p>
+          <AudioButton text={`Буква ${item.letter}. Звук ${item.phoneme}. ${item.word}. ${item.hint}`} label="Послушать букву" />
+          <ProgressStars value={progress} />
+        </div>
       </div>
       <LetterCheck key={item.letter} item={item} next={next} recordAttempt={recordAttempt} />
     </section>
