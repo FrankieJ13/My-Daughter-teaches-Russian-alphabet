@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 
 const links = [
@@ -11,6 +12,41 @@ const links = [
 export default function AppShell() {
   const location = useLocation();
   const isLetterPage = location.pathname.startsWith('/letter/');
+
+  useEffect(() => {
+    const preventZoom = (event) => {
+      event.preventDefault();
+    };
+    const preventMultiTouch = (event) => {
+      if (event.touches?.length > 1) {
+        event.preventDefault();
+      }
+    };
+
+    document.addEventListener('gesturestart', preventZoom, { passive: false });
+    document.addEventListener('gesturechange', preventZoom, { passive: false });
+    document.addEventListener('gestureend', preventZoom, { passive: false });
+    document.addEventListener('dblclick', preventZoom, { passive: false });
+    document.addEventListener('touchmove', preventMultiTouch, { passive: false });
+
+    return () => {
+      document.removeEventListener('gesturestart', preventZoom);
+      document.removeEventListener('gesturechange', preventZoom);
+      document.removeEventListener('gestureend', preventZoom);
+      document.removeEventListener('dblclick', preventZoom);
+      document.removeEventListener('touchmove', preventMultiTouch);
+    };
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('no-page-scroll', isLetterPage);
+    document.body.classList.toggle('no-page-scroll', isLetterPage);
+
+    return () => {
+      document.documentElement.classList.remove('no-page-scroll');
+      document.body.classList.remove('no-page-scroll');
+    };
+  }, [isLetterPage]);
 
   return (
     <div className={isLetterPage ? 'app-shell app-shell--letter' : 'app-shell'}>
