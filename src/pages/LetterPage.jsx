@@ -5,7 +5,9 @@ import ProgressStars from '../components/ProgressStars.jsx';
 import { alphabet, getLetterBySymbol } from '../data/alphabet.js';
 import useProgress from '../hooks/useProgress.js';
 import { makeLetterOptions, shuffle } from '../utils.js';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+
+const initialCheckMessage = 'Сначала послушай букву, потом найди её ниже.';
 
 export default function LetterPage() {
   const { letter } = useParams();
@@ -15,8 +17,14 @@ export default function LetterPage() {
   const index = alphabet.findIndex((entry) => entry.letter === item.letter);
   const next = alphabet[(index + 1) % alphabet.length];
   const [answered, setAnswered] = useState(false);
-  const [message, setMessage] = useState('Сначала послушай букву, потом найди её ниже.');
+  const [message, setMessage] = useState(initialCheckMessage);
   const checkOptions = useMemo(() => makeLetterOptions(item, { count: 3 }), [item]);
+  const syllables = useMemo(() => shuffle(item.syllables).join(' · '), [item]);
+
+  useEffect(() => {
+    setAnswered(false);
+    setMessage(initialCheckMessage);
+  }, [item.letter]);
 
   const choose = (choice) => {
     if (answered) {
@@ -40,7 +48,7 @@ export default function LetterPage() {
         <span className="letter-focus__emoji" aria-hidden="true">{item.emoji}</span>
         <h1>{item.letter} {item.lower}</h1>
         <p>{item.letter} — как в слове «{item.word}». Звук: {item.phoneme}.</p>
-        <p className="syllables">Слоги: {shuffle(item.syllables).join(' · ')}</p>
+        <p className="syllables">Слоги: {syllables}</p>
         <ProgressStars value={progress} />
         <AudioButton text={`Буква ${item.letter}. Звук ${item.phoneme}. ${item.word}. ${item.hint}`} label="Послушать букву" />
       </div>
