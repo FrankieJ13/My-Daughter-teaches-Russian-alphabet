@@ -16,7 +16,7 @@ export default function GamesPage() {
     <section>
       <div className="page-heading">
         <h1>Игры</h1>
-        <p>Выбирай игру и собирай звёзды.</p>
+        <p>Игра чаще даёт буквы, которые пока требуют повторения.</p>
       </div>
       <div className="game-tabs" role="tablist" aria-label="Игры">
         {Object.entries(games).map(([key, game]) => (

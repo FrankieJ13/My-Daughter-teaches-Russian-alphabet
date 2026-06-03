@@ -1,10 +1,12 @@
 import BigButton from '../components/BigButton.jsx';
 import { alphabet } from '../data/alphabet.js';
-import { readProgress } from '../utils.js';
+import useProgress from '../hooks/useProgress.js';
+import { getLearningSummary } from '../utils.js';
 
 export default function HomePage() {
-  const progress = readProgress();
-  const learned = alphabet.filter((item) => (progress[item.letter] || 0) >= 3).length;
+  const { progress } = useProgress();
+  const { learned, practice } = getLearningSummary(progress);
+  const practiceText = practice.map((item) => item.letter).join(', ');
 
   return (
     <section className="home">
@@ -17,6 +19,9 @@ export default function HomePage() {
         <BigButton to="/alphabet">Учить буквы</BigButton>
         <BigButton to="/games" variant="sunny">Играть</BigButton>
         <BigButton to="/progress" variant="soft">Мои успехи: {learned} из {alphabet.length}</BigButton>
+      </div>
+      <div className="learning-note">
+        <strong>Сегодня повторяем:</strong> {practiceText || 'все буквы изучены'}
       </div>
     </section>
   );

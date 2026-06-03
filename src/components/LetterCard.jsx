@@ -9,10 +9,11 @@ export default function LetterCard({ item, progress = 0 }) {
         <span className="letter-card__emoji" aria-hidden="true">{item.emoji}</span>
         <span className="letter-card__letter">{item.letter}{item.lower}</span>
         <span className="letter-card__word">{item.word}</span>
+        <span className="letter-card__sound">звук: {item.phoneme}</span>
       </Link>
       <div className="letter-card__footer">
         <ProgressStars value={progress} />
-        <AudioButton text={`${item.letter}. ${item.word}`} label="Звук" />
+        <AudioButton text={`Буква ${item.letter}. Звук ${item.phoneme}. ${item.word}.`} label="Звук" />
       </div>
     </article>
   );

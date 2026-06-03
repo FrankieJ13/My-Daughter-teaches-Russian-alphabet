@@ -1,9 +1,9 @@
 import LetterCard from '../components/LetterCard.jsx';
 import { alphabet } from '../data/alphabet.js';
-import { readProgress } from '../utils.js';
+import useProgress from '../hooks/useProgress.js';
 
 export default function AlphabetPage() {
-  const progress = readProgress();
+  const { starsFor } = useProgress();
 
   return (
     <section>
@@ -13,7 +13,7 @@ export default function AlphabetPage() {
       </div>
       <div className="alphabet-grid">
         {alphabet.map((item) => (
-          <LetterCard key={item.letter} item={item} progress={progress[item.letter] || 0} />
+          <LetterCard key={item.letter} item={item} progress={starsFor(item.letter)} />
         ))}
       </div>
     </section>

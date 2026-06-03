@@ -2,25 +2,45 @@ import { useState } from 'react';
 import BigButton from '../components/BigButton.jsx';
 import AudioButton from '../components/AudioButton.jsx';
 import { alphabet } from '../data/alphabet.js';
-import { addProgress, shuffle } from '../utils.js';
+import useProgress from '../hooks/useProgress.js';
+import { makeLetterOptions, pickLearningLetter } from '../utils.js';
 
-const makeRound = () => {
-  const answer = shuffle(alphabet.filter((item) => !['Ъ', 'Ь', 'Ы'].includes(item.letter)))[0];
-  const options = shuffle([answer, ...shuffle(alphabet.filter((item) => item.letter !== answer.letter)).slice(0, 3)]);
-  return { answer, options };
+const playable = alphabet.filter((item) => !['Ъ', 'Ь', 'Ы'].includes(item.letter));
+
+const makeRound = (progress) => {
+  const answer = pickLearningLetter({ progress, pool: playable });
+  return {
+    answer,
+    options: makeLetterOptions(answer, { pool: playable }),
+    mistakes: 0,
+    solved: false
+  };
 };
 
 export default function FirstLetterGame() {
-  const [round, setRound] = useState(makeRound);
+  const { progress, recordAttempt } = useProgress();
+  const [round, setRound] = useState(() => makeRound(progress));
   const [message, setMessage] = useState('Какая буква первая?');
 
   const choose = (item) => {
-    if (item.letter === round.answer.letter) {
-      addProgress(item.letter, 1);
-      setMessage('Да! Слово начинается с этой буквы.');
-    } else {
-      setMessage('Попробуй ещё раз. Послушай слово внимательно.');
+    if (round.solved) {
+      return;
     }
+
+    if (item.letter === round.answer.letter) {
+      recordAttempt(item.letter, { correct: true, firstTry: round.mistakes === 0 });
+      setRound((current) => ({ ...current, solved: true }));
+      setMessage(`Да. ${round.answer.word} начинается со звука ${round.answer.phoneme}.`);
+    } else {
+      recordAttempt(round.answer.letter, { correct: false });
+      setRound((current) => ({ ...current, mistakes: current.mistakes + 1 }));
+      setMessage(`Слушаем начало слова: ${round.answer.word}. ${round.answer.hint}`);
+    }
+  };
+
+  const nextRound = () => {
+    setRound(makeRound(progress));
+    setMessage('Какая буква первая?');
   };
 
   return (
@@ -33,13 +53,19 @@ export default function FirstLetterGame() {
       <AudioButton text={round.answer.word} label="Послушать слово" />
       <div className="option-grid">
         {round.options.map((item) => (
-          <button key={item.letter} type="button" className="letter-option" onClick={() => choose(item)}>
+          <button
+            key={item.letter}
+            type="button"
+            className="letter-option"
+            onClick={() => choose(item)}
+            disabled={round.solved}
+          >
             {item.letter}
           </button>
         ))}
       </div>
       <p className="game-message">{message}</p>
-      <BigButton onClick={() => { setRound(makeRound()); setMessage('Какая буква первая?'); }} variant="soft">
+      <BigButton onClick={nextRound} variant="soft">
         Новое слово
       </BigButton>
     </div>
