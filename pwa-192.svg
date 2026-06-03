@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" role="img" aria-label="Азбука-игра">
+  <rect width="192" height="192" rx="40" fill="#ffcf4d"/>
+  <circle cx="52" cy="52" r="22" fill="#57c7ff"/>
+  <circle cx="142" cy="52" r="22" fill="#ff7a90"/>
+  <path d="M42 139 82 50h24l40 89h-25l-7-18H73l-7 18H42Zm39-39h25L94 69 81 100Z" fill="#232323"/>
+</svg>
