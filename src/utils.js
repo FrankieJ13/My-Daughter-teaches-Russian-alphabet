@@ -2,8 +2,9 @@ import { alphabet } from './data/alphabet.js';
 
 const PROGRESS_KEY = 'azbuka-progress';
 
-export const speak = (text) => {
+export const speak = (text) => new Promise((resolve) => {
   if (!('speechSynthesis' in window)) {
+    resolve();
     return;
   }
 
@@ -12,8 +13,20 @@ export const speak = (text) => {
   utterance.lang = 'ru-RU';
   utterance.rate = 0.82;
   utterance.pitch = 1.08;
+  utterance.onend = resolve;
+  utterance.onerror = resolve;
   window.speechSynthesis.speak(utterance);
+});
+
+export const stopSpeech = () => {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+  }
 };
+
+export const correctPhrases = ['Верно!', 'Правильно!', 'Молодец!', 'Так держать!', 'Умница!', 'Отличный результат!'];
+export const wrongPhrases = ['Неверно.', 'Ошибка.', 'Подумай ещё.', 'Так не пойдёт.', 'Плохо.', 'Будь внимательнее.'];
+export const pickPhrase = (phrases) => phrases[Math.floor(Math.random() * phrases.length)];
 
 const emptyLetterProgress = () => ({
   stars: 0,

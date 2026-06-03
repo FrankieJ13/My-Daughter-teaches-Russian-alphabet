@@ -56,9 +56,14 @@ export default function AppShell() {
           <span>Азбука-игра</span>
         </NavLink>
         {isLetterPage && (
-          <span className="topbar__status" aria-label="Озвучивание включено">
-            🔊 Озвучено
-          </span>
+          <button
+            className="topbar__status"
+            type="button"
+            onClick={() => window.dispatchEvent(new Event('azbuka-toggle-pause'))}
+            aria-label="Пауза"
+          >
+            ⏸️ Пауза
+          </button>
         )}
       </header>
       <main className="page">
